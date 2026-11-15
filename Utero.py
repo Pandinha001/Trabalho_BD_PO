@@ -1,0 +1,59 @@
+from sqlalchemy import Column, Integer, ForeignKey
+from sqlalchemy.orm import relationship
+from database import Base
+
+
+class Utero(Base):
+    __tablename__ = 'utero'
+
+    id_avatar_utero = Column(Integer, ForeignKey('organismo.id_avatar'), primary_key=True)
+    tamanho_utero = Column(Integer, nullable=False, default=10)
+    saude = Column(Integer, nullable=False, default=10)
+
+    organismo = relationship('Organismo', back_populates='utero')
+
+    def __init__(self, tamanho_utero=10, saude=10):
+        self.tamanho_utero = tamanho_utero
+        self.saude = saude
+
+    def atualizar_tamanho_por_idade(self):
+        if self.organismo.idade < 12:
+            self.tamanho_utero = 5
+        elif self.organismo.idade > 55:
+            self.tamanho_utero = 7
+        else:
+            self.tamanho_utero = 10
+
+    def menstruar(self):
+        if 12 <= self.organismo.idade <= 55:
+            if self.organismo.fome >= 60 or self.organismo.energia <= 40:
+                self.saude = max(0, self.saude - 2)
+                print("Cuidado! você tem um índice de saúde baixo.")
+            else:
+                print("Você está menstruando normalmente!")
+        else:
+            self.saude = 10
+            print("Você não está na idade fértil.")
+
+    def verificar_status(self):
+        print("--- Status do Útero ---")
+        print(f"Tamanho do útero: {self.tamanho_utero}")
+        print(f"Saúde do útero: {self.saude}")
+
+        if self.saude <= 4:
+            print("Estado crítico!")
+        elif self.saude <= 7:
+            print("Estado de atenção.")
+        else:
+            print("Estado saudável.")
+
+        idade = self.organismo.idade
+        if idade < 12:
+            print("Você ainda não passou pela menarca garotinha!")
+        elif idade > 55:
+            print("Você está na fase pós-menopausa")
+        else:
+            print("Que útero abençoado! Está super fértil")
+
+    def __repr__(self):
+        return f"Utero({self.id_avatar_utero}, saude={self.saude})"
