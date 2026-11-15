@@ -12,7 +12,7 @@ class Organismo(Base):
     id_avatar = Column(Integer, primary_key=True, autoincrement=True)
     nome = Column(String(100), nullable=False)
     idade = Column(Integer, nullable=False)
-    peso = Column(Numeric(10, 2, asdecimal=False), nullable=False)   # float em vez de Decimal
+    peso = Column(Numeric(10, 2, asdecimal=False), nullable=False)   
     energia = Column(Integer, nullable=False)
     intensidade_dor = Column(Integer, nullable=False)
     fome = Column(Integer, nullable=False)
@@ -29,7 +29,7 @@ class Organismo(Base):
         self.energia = 100
         self.intensidade_dor = 0
         self.fome = 0
-        self.bioma = bioma                                  # objeto Bioma (e não a classe)
+        self.bioma = bioma                                 
         self.pele = Pele(melanina=choice(["baixa", "media", "alta"]))
         self.utero = Utero()
 
@@ -96,7 +96,7 @@ class Organismo(Base):
 
     def proteger(self, escolha):
         if escolha in (1, 2, 3):
-            self.bioma.proteger(self, escolha)      # cada bioma sabe qual item é o correto
+            self.bioma.proteger(self, escolha)      
         else:
             print("Opção inválida! Você não se protegeu.")
             self.intensidade_dor += 3

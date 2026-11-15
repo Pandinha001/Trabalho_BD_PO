@@ -10,7 +10,6 @@ class Sistema():
     def __init__(self, session):
         self.session = session
 
-    ### consultas no banco (substituem as antigas listas self.avatares / self.biomas)
     def listar_biomas(self):
         return self.session.scalars(select(Bioma).order_by(Bioma.id_bioma)).all()
 
@@ -20,7 +19,7 @@ class Sistema():
     def salvar(self):
         self.session.commit()
 
-    ### criação
+
     def criar_bioma(self, escolha):
         if escolha == 1:    # floresta tropical
             tipo_solo = input("Informe o tipo do solo: ")

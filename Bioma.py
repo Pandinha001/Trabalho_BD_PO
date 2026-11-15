@@ -14,9 +14,6 @@ class TipoProtecao(Base):
 
 
 class Bioma(Base):
-    """Classe base. As subclasses (Savana, Tundra, FlorestaTropical) ficam
-    TODAS na mesma tabela 'bioma' (herança de tabela única): a coluna 'nome'
-    diz de qual subclasse é cada linha."""
     __tablename__ = 'bioma'
 
     id_bioma = Column(Integer, primary_key=True, autoincrement=True)
@@ -28,7 +25,6 @@ class Bioma(Base):
     especificidade = Column(String(70), nullable=False)
     tipo_solo = Column(String(50), nullable=False)
 
-    # chave estrangeira (coluna real): qual proteção é a correta neste bioma
     id_item_correto = Column(Integer, ForeignKey('tipo_protecao.id_tipo'), nullable=False)
     protecao_correta = relationship('TipoProtecao')                        # N:1
     organismos = relationship('Organismo', back_populates='bioma')         # 1:N
@@ -46,8 +42,6 @@ class Bioma(Base):
         self.tipo_solo = tipo_solo
         self.id_item_correto = id_item_correto
 
-    # Obs.: não usamos ABC aqui, porque ABCMeta conflita com a metaclasse do
-    # SQLAlchemy. O efeito é o mesmo: cada subclasse DEVE sobrescrever estes métodos.
     def calcular_temperatura(self):
         raise NotImplementedError
 

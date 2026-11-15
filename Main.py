@@ -66,7 +66,7 @@ while True:
                 peso = ler_numero("Informe o peso: ", float)
                 sistema.criar_avatar(nome, idade, peso, bioma)
                 print("Avatar criado com sucesso!")
-                # pele e útero já são criados juntos dentro do avatar na classe Organismo
+       
 
         elif opcao == 3:
             sistema.ver_status_saude()
