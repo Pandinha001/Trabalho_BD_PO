@@ -1,5 +1,7 @@
 from database import Session
 from Sistema import Sistema
+import os
+os.system('cls')
 
 
 def ler_numero(mensagem, tipo=int):
@@ -15,6 +17,7 @@ def escolher_avatar(sistema):
     if not avatares:
         print("Nenhum avatar criado ainda.")
         return None
+    print("\n --- AVATARES ---")
     for i, a in enumerate(avatares):
         print(f"{i}) {a.nome} ({a.bioma.nome})")
     indice = ler_numero("Informe o índice do avatar: ")
@@ -29,6 +32,7 @@ def escolher_bioma(sistema):
     if not biomas:
         print("Nenhum bioma cadastrado. Crie um bioma primeiro (opção 1).")
         return None
+    print("\n --- BIOMAS ---")
     for i, b in enumerate(biomas):
         print(f"{i}) {b.nome} (id {b.id_bioma})")
     indice = ler_numero("Escolha o índice do bioma: ")
@@ -36,6 +40,22 @@ def escolher_bioma(sistema):
         return biomas[indice]
     print("Índice inválido!")
     return None
+
+
+def montar_menu(tem_avatar):
+    op = {1: "Criar um Bioma", 2: "Criar um Avatar", }
+    if tem_avatar:
+        op.update({
+            3: "Ver status do avatar",
+            4: "Ver status do bioma",
+            5: "Fazer nada",
+            6: "Alimentar",
+            7: "Hidratar",
+            8: "Proteger",
+            9: "Movimentar",
+        })
+    op[10] = "Sair"
+    return op
 
 
 session = Session()
@@ -46,9 +66,11 @@ print("Seja bem vindo(a) ao BioLógica! \n Escolha seu bioma, avatar, e viva uma
 while True:
     play = input("Deseja dar play na rodada? (s/n) ")
     if play == 's':
-        opcao = ler_numero("O que deseja fazer? \n1)Criar um bioma \n2)Criar um avatar \n3)Ver status do avatar "
-                           "\n4)Ver status do bioma \n5)Fazer nada \n6)Alimentar \n7)Hidratar \n8)Proteger "
-                           "\n9)Movimentar \n10)Sair\n")
+        opcao = montar_menu(len(sistema.listar_avatares()) > 0)
+        print("\n O que deseja fazer? ")
+        for numero, texto in opcao.items():
+            print(f"{numero}: {texto}")
+        opcao = ler_numero("")
 
         if opcao == 1:
             print("\n--- Biomas ---\n")
@@ -69,12 +91,16 @@ while True:
        
 
         elif opcao == 3:
-            sistema.ver_status_saude()
-            sistema.fazer_funcoes_utero()
-            sistema.fazer_funcoes_pele()
+            avatar = escolher_avatar(Sistema)
+            if avatar:
+                sistema.ver_status_saude()
+                sistema.fazer_funcoes_utero()
+                sistema.fazer_funcoes_pele()
 
         elif opcao == 4:
-            sistema.exibir_dados()
+            bioma = escolher_avatar(Sistema)
+            if bioma:
+                sistema.exibir_dados()
 
         elif opcao == 5:
             avatar = escolher_avatar(sistema)
@@ -83,13 +109,13 @@ while True:
                 sistema.salvar()
 
         elif opcao == 6:
-            print("\n--- Menu de Comidas ---\n")
-            print("1. Carne podre")
-            print("2. Carne Crua")
-            print("3. Carne Assada")
-            escolha = ler_numero("Escolha o número da sua comida: ")
             avatar = escolher_avatar(sistema)
             if avatar:
+                print("\n--- Menu de Comidas ---\n")
+                print("1. Carne podre")
+                print("2. Carne Crua")
+                print("3. Carne Assada")
+                escolha = ler_numero("Escolha o número da sua comida: ")
                 avatar.alimentar(escolha)
                 sistema.salvar()
 
@@ -126,6 +152,9 @@ while True:
             print("Ok, volte sempre!")
             break
 
+        elif opcao 3 <= opcao <= 9:
+            print("Opção inválida!")
+
         else:
             print("Opção inválida!")
 
@@ -134,5 +163,6 @@ while True:
         break
     else:
         print("Opção inválida!")
+        continue
 
 session.close()
